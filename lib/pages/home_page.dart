@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/action_buttons.dart';
+import '../widgets/user_list.dart';
 
 
 class HomePage extends StatelessWidget {
@@ -15,9 +16,9 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: const [
           ActionButtons(),
-          // UserList(),
+          Expanded(child: UserList()),
         ],
       ),
     );
