@@ -1,14 +1,13 @@
 import 'dart:convert';
-import '../model/user.dart';
 import 'package:http/http.dart' as http;
+import '../model/user.dart';
 
 class UserProvider {
 
-  //https:jsonplaceholder.typicode.com/users
+  // https://jsonplaceholder.typicode.com/users
 
   Future<List<User>> getUsers() async {
-    final response = await http.get(
-        Uri.parse('https:jsonplaceholder.typicode.com/users'));
+    final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
 
     if (response.statusCode == 200) {
       final List<dynamic> userJson = json.decode(response.body);

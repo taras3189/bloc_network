@@ -1,51 +1,61 @@
-import 'package:bloc_network/bloc/user_state.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/user_bloc.dart';
+import '../bloc/user_state.dart';
 
 class UserList extends StatelessWidget {
   const UserList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(
+    return BlocConsumer<UserBloc, UserState>(
+      listener: ((context, state) {
+        log(state.toString());
+        if (state is UserLoadedState) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('Users is Loaded')));
+        }
+      }),
       builder: (context, state) {
         if (state is UserEmptyState) {
           return const Center(
             child: Text(
-              'No data received. Please press button "Load"',
+              'No data received. Please button "Load"',
               style: TextStyle(fontSize: 20),
             ),
           );
         }
+
         if (state is UserLoadingState) {
           return const Center(child: CircularProgressIndicator());
         }
+
         if (state is UserLoadedState) {
-          ListView.builder(
-            itemCount: 20,
+          return ListView.builder(
+            itemCount: state.loadedUser.length,
             itemBuilder: (context, index) => Container(
               color: index % 2 == 0 ? Colors.white : Colors.blue[50],
               child: ListTile(
-                leading: const Text(
-                  'ID 1',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                leading: Text(
+                  'ID: ${state.loadedUser[index].id}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 title: Column(
                   children: [
-                    const Text(
-                      'My Name',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    Text(
+                      state.loadedUser[index].name,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Column(
-                      children: const [
+                      children: [
                         Text(
-                          'Email: test@test.net',
-                          style: TextStyle(fontStyle: FontStyle.italic),
+                          'Email: ${state.loadedUser[index].email}',
+                          style: const TextStyle(fontStyle: FontStyle.italic),
                         ),
                         Text(
-                          'Phone 1234564789',
-                          style: TextStyle(fontStyle: FontStyle.italic),
+                          'Phone: ${state.loadedUser[index].phone}',
+                          style: const TextStyle(fontStyle: FontStyle.italic),
                         ),
                       ],
                     ),
@@ -55,11 +65,12 @@ class UserList extends StatelessWidget {
             ),
           );
         }
+
         if (state is UserErrorState) {
           return const Center(
             child: Text(
               'Error fetching users',
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 20.0),
             ),
           );
         }
