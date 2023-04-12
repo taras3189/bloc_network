@@ -20,7 +20,7 @@ class ActionButtons extends StatelessWidget {
             userBloc.add(UserLoadEvent());
           },
           style: ElevatedButton.styleFrom(
-            primary: Colors.green,
+            backgroundColor: Colors.green,
           ),
           child: const Text('Load'),
         ),
